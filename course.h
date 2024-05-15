@@ -6,14 +6,14 @@ using namespace std;
 
 class Course {
   private:
-    int id;
-    string name;
-    string instructor;
-    int credit;
-    string teacher;
+    int id;//课程号
+    string name;//课程名
+    int credit;//学分
+    string teacher;//教师
+    int score;//考试成绩
 
   public:
-    Course(int, string, string, int);
+    Course(int, string, int, string);
     ~Course();
 
     void display();
@@ -24,16 +24,12 @@ class Coursedata {
     vector<Course> courses;
 
   public:
-    Coursedata();
-    ~Coursedata();
-    void addCourse(Course);
+    void init_data();
+    void findCourse(const string& courseName);//查找课程
+    void findCourse(int courseId);//查找课程
+    void addCourse(Course);//添加课程
     void removeCourse(const string& courseName);//删除学生的某个课程
+    void removeCourse(int courseId);//删除学生的某个课程
     void displayCourses();//展示学生的所有课程
     void displayCourse(const string& courseName);//展示学生的某个课程的具体信息
-    // void displayStudents(int);//同下
-    // void addStudent(int, Student);//可以是第二次才实现的功能
-    // void removeStudent(int, int);
-    // void displayStudent(int, int);
-    // void displayAllStudents();
-    // void displayAllCourses();
 };

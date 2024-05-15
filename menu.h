@@ -2,11 +2,9 @@
 
 class Menu {
     public:
-        void login();
-        void main_menu();
-        void course_menu();
-        void Reader_Maintenance_Interface();
-        void UI();
+        void login();//登录界面
+        void main_menu();//主菜单
+        void course_menu();//课程一览
     };
 };
 

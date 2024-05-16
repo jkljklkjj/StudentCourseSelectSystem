@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-void Course::display() {
+void Course::display() const{
     cout << "课程ID: " << id << " ";
     cout << "课程名称: " << name << " ";
     cout << "课程学分: " << credit << " ";
@@ -53,7 +53,7 @@ void Coursedata::addCourse(Course course) { courses.push_back(course); }
 
 void Coursedata::removeCourse(const string& courseName) {
     for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].name == courseName) {
+        if (courses[i].getname() == courseName) {
             courses.erase(courses.begin() + i);
             cout << "课程" << courseName << "已删除" << endl;
             return;
@@ -64,7 +64,7 @@ void Coursedata::removeCourse(const string& courseName) {
 
 void Coursedata::removeCourse(int courseId) {
     for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].id == courseId) {
+        if (courses[i].getid() == courseId) {
             courses.erase(courses.begin() + i);
             cout << "课程" << courseId << "已删除" << endl;
             return;
@@ -73,9 +73,9 @@ void Coursedata::removeCourse(int courseId) {
     cout << "未找到课程" << courseId << endl;
 }
 
-Course Coursedata::findCourse(const string& courseName) {
+Course Coursedata::findCourse(const string& courseName) const {
     for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].name == courseName) {
+        if (courses[i].getname() == courseName) {
             courses[i].display();
             return courses[i];
         }
@@ -84,17 +84,17 @@ Course Coursedata::findCourse(const string& courseName) {
     return Course();
 }
 
-Course Coursedata::findCourse(int courseId) {
+Course Coursedata::findCourse(int courseId) const {
     // 使用二分查找，把复杂度降低到O(logn)
     int left = 0;
     int right = courses.size() - 1;
     while (left <= right) {
         int mid = left + (right - left) / 2;
-        if (courses[mid].id == courseId) {
+        if (courses[mid].getid() == courseId) {
             courses[mid].display();
             return courses[mid];
         }
-        if (courses[mid].id < courseId) {
+        if (courses[mid].getid() < courseId) {
             left = mid + 1;
         } else {
             right = mid - 1;
@@ -104,10 +104,8 @@ Course Coursedata::findCourse(int courseId) {
     return Course();
 }
 
-void Coursedata::displayCourses() {
+void Coursedata::displayCourses() const{
     for (int i = 0; i < courses.size(); i++) {
         courses[i].display();
     }
 }
-
-void 

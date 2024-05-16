@@ -14,13 +14,18 @@ class Student {
 
   public:
     Student();
-    setStudent(int, string, string);
-    Student(int, string, string); 
+    Student(long long id, string name, string password);
+    void setStudent(long long, string, string);
     ~Student();
-
-    void display();//展示学生信息
+    void display() const;//展示学生信息
     void setPassword(string);//设置密码
-    int getid();//获取学生id
+    int getid() const;//获取学生id
+    string getpassword() const;//添加课程
+    void addCourse(Course);
+    void removeCourse(const string& courseName);
+    Course findCourse(const string& courseName) const;
+    Course findCourse(int courseId) const;
+    void displayAllCourses();
 };
 
 class Studentdata {
@@ -28,14 +33,7 @@ class Studentdata {
     vector<Student> students;
 
   public:
-    Studentdata(); // 构造函数
-    ~Studentdata();
     void init_data(); // 初始化数据
     void addStudent(Student); // 添加学生
-    
-    void addCourse(Course);
-    void removeCourse(const string& courseName);
-    Course findCourse(const string& courseName);
-    Course findCourse(int courseId);
-    void displayAllCourses();
+    Student findStudent(long long) const; // 查找学生
 };

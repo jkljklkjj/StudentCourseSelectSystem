@@ -6,6 +6,8 @@ using namespace std;
 Student::Student(long long id, string name, string password)
     : id(id), name(name), password(password) {}
 
+Student::Student() {}
+
 Student::~Student() { cout << "学生" << name << "的信息已删除" << endl; }
 
 void Studentdata::init_data() {
@@ -32,7 +34,7 @@ void Studentdata::init_data() {
     addStudent(student10);
 }
 
-void Student::display() {
+void Student::display() const {
     cout << "学生ID: " << id << endl;
     cout << "学生姓名: " << name << endl;
     cout << "学生所选课程: " << endl;
@@ -41,15 +43,36 @@ void Student::display() {
 
 void Student::setPassword(string password) { this->password = password; }
 
-int Student::getid() { return id; }
+int Student::getid() const { return id; }
 
-void Studentdata::displayAllStudents() {
-    for (int i = 0; i < students.size(); i++) {
-        students[i].display();
-    }
+string Student::getpassword() const { return password; }
+
+void Student::setStudent(long long id, string name, string password) {
+    this->id = id;
+    this->name = name;
+    this->password = password;
 }
 
 void Studentdata::addStudent(Student student) { students.push_back(student); }
+
+Student Studentdata::findStudent(long long id) const {
+    int left = 0;
+    int right = students.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (students[mid].getid() == id) {
+            students[mid].display();
+            return students[mid];
+        }
+        if (students[mid].getid() < id) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    cout << "未找到学号为" << id << "的学生" << endl;
+    return Student(); // 返回一个默认的 Student 对象
+}
 
 void Student::addCourse(Course course) { courses.addCourse(course); }
 
@@ -57,7 +80,7 @@ void Student::removeCourse(const string& courseName) {
     courses.removeCourse(courseName);
 }
 
-Course Student::findCourse(const string& courseName) {
+Course Student::findCourse(const string& courseName) const {
     courses.findCourse(courseName);
 }
 

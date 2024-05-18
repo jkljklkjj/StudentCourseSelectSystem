@@ -1,12 +1,14 @@
-#pragma once
-#include "login.h"
+#include "system.h"
 #include "student.h"
 #include <iostream>
 #include <thread>
+
+extern Studentdata studentdata;
+extern Coursedata coursedata;
+extern long long id;
 using namespace std;
 
 Login::Login() {
-    long long id;
     string password;
     cout << "请输入您的学号：";
     cin >> id;
@@ -17,8 +19,7 @@ Login::Login() {
     times = 3;
 }
 
-bool Login::check(long long id, string password,
-                  const Studentdata &studentdata) {
+bool Login::check(long long id, string password) {
     Student student = studentdata.findStudent(id);
     if (student.getid() == id && student.getpassword() == password) {
         return true;
@@ -36,11 +37,15 @@ long long Login::getid() { return id; }
 
 string Login::getpassword() { return password; }
 
-void Login::begin(const Studentdata &studentdata) {
-    if (check(id, password, studentdata)) {
+void Login::begin() {
+    if (check(id, password)) {
         cout << "登录成功！" << endl;
+        cout << "欢迎您，" << studentdata.findStudent(id).getname() << "同学！"
+             << endl;
         this_thread::sleep_for(chrono::seconds(1));
         system("cls");
+
+
     } else {
         cout << "登录失败！" << endl;
     }

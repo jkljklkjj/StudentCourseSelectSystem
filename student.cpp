@@ -1,5 +1,4 @@
 #include "student.h"
-#include "course.h"
 #include <iostream>
 using namespace std;
 
@@ -47,6 +46,8 @@ int Student::getid() const { return id; }
 
 string Student::getpassword() const { return password; }
 
+string Student::getname() const { return name; }
+
 void Student::setStudent(long long id, string name, string password) {
     this->id = id;
     this->name = name;
@@ -76,12 +77,14 @@ Student Studentdata::findStudent(long long id) const {
 
 void Student::addCourse(Course course) { courses.addCourse(course); }
 
-void Student::removeCourse(const string& courseName) {
+void Student::removeCourse(const string &courseName) {
     courses.removeCourse(courseName);
 }
 
-Course Student::findCourse(const string& courseName) const {
-    courses.findCourse(courseName);
+Course Student::findCourse(const string &courseName) const {
+    return courses.findCourse(courseName);
 }
+
+Course Student::findCourse(int courseId) const { return courses.findCourse(courseId); }
 
 void Student::displayAllCourses() { courses.displayCourses(); }

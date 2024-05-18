@@ -2,7 +2,24 @@
 #include <iostream>
 using namespace std;
 
-void Course::display() const{
+Course::Course() {
+    id = 0;
+    name = "";
+    teacher = "";
+    credit = 0;
+    score = 0;
+}
+
+Course::Course(int id, string name, string teacher, int credit)
+    : id(id), name(name), teacher(teacher), credit(credit), score(0) {}
+
+Course::~Course() {}
+
+int Course::getid() const { return id; }
+
+string Course::getname() const { return name; }
+
+void Course::display() const {
     cout << "课程ID: " << id << " ";
     cout << "课程名称: " << name << " ";
     cout << "课程学分: " << credit << " ";
@@ -28,7 +45,7 @@ void Coursedata::init_data() {
     Course course16(16, "计算机图形学", "孙八", 3);
     Course course17(17, "虚拟现实", "周九", 3);
     Course course18(18, "云计算", "吴十", 3);
-    
+
     courses.push_back(course1);
     courses.push_back(course2);
     courses.push_back(course3);
@@ -51,7 +68,7 @@ void Coursedata::init_data() {
 
 void Coursedata::addCourse(Course course) { courses.push_back(course); }
 
-void Coursedata::removeCourse(const string& courseName) {
+void Coursedata::removeCourse(const string &courseName) {
     for (int i = 0; i < courses.size(); i++) {
         if (courses[i].getname() == courseName) {
             courses.erase(courses.begin() + i);
@@ -73,7 +90,7 @@ void Coursedata::removeCourse(int courseId) {
     cout << "未找到课程" << courseId << endl;
 }
 
-Course Coursedata::findCourse(const string& courseName) const {
+Course Coursedata::findCourse(const string &courseName) const {
     for (int i = 0; i < courses.size(); i++) {
         if (courses[i].getname() == courseName) {
             courses[i].display();
@@ -104,8 +121,18 @@ Course Coursedata::findCourse(int courseId) const {
     return Course();
 }
 
-void Coursedata::displayCourses() const{
+void Coursedata::displayCourses() const {
     for (int i = 0; i < courses.size(); i++) {
         courses[i].display();
     }
+}
+
+void Coursedata::displayCourse(const string &courseName) {
+    for (int i = 0; i < courses.size(); i++) {
+        if (courses[i].getname() == courseName) {
+            courses[i].display();
+            return;
+        }
+    }
+    cout << "未找到课程" << courseName << endl;
 }

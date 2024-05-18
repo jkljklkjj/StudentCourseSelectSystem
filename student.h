@@ -17,13 +17,14 @@ class Student {
     Student(long long id, string name, string password);
     void setStudent(long long, string, string);
     ~Student();
-    void display() const;//展示学生信息
-    void setPassword(string);//设置密码
-    int getid() const;//获取学生id
-    string getpassword() const;//添加课程
+    void display() const;       // 展示学生信息
+    void setPassword(string);   // 设置密码
+    int getid() const;          // 获取学生id
+    string getname() const;     // 获取学生姓名
+    string getpassword() const; // 添加课程
     void addCourse(Course);
-    void removeCourse(const string& courseName);
-    Course findCourse(const string& courseName) const;
+    void removeCourse(const string &courseName);
+    Course findCourse(const string &courseName) const;
     Course findCourse(int courseId) const;
     void displayAllCourses();
 };
@@ -33,7 +34,7 @@ class Studentdata {
     vector<Student> students;
 
   public:
-    void init_data(); // 初始化数据
-    void addStudent(Student); // 添加学生
+    void init_data();                     // 初始化数据
+    void addStudent(Student);             // 添加学生
     Student findStudent(long long) const; // 查找学生
 };

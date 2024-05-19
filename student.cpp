@@ -1,5 +1,6 @@
 #include "student.h"
 #include <iostream>
+#include <functional>
 using namespace std;
 
 Student::Student(long long id, string name, string password)
@@ -7,7 +8,7 @@ Student::Student(long long id, string name, string password)
 
 Student::Student() {}
 
-Student::~Student() { cout << "学生" << name << "的信息已删除" << endl; }
+Student::~Student() {}
 
 void Studentdata::init_data() {
     Student student1(20232005036, "陈振业", "123456");
@@ -54,7 +55,7 @@ void Student::setStudent(long long id, string name, string password) {
     this->password = password;
 }
 
-void Studentdata::addStudent(Student student) { students.push_back(student); }
+void Studentdata::addStudent(const Student& student) { students.push_back(student); }
 
 Student Studentdata::findStudent(long long id) const {
     int left = 0;
@@ -62,7 +63,6 @@ Student Studentdata::findStudent(long long id) const {
     while (left <= right) {
         int mid = left + (right - left) / 2;
         if (students[mid].getid() == id) {
-            students[mid].display();
             return students[mid];
         }
         if (students[mid].getid() < id) {
@@ -73,6 +73,34 @@ Student Studentdata::findStudent(long long id) const {
     }
     cout << "未找到学号为" << id << "的学生" << endl;
     return Student(); // 返回一个默认的 Student 对象
+}
+
+void Studentdata::sortByid() {//根据学号来进行快速排序
+    auto partition = [](vector<Student>& students, int low, int high) {
+        Student pivot = students[high];
+        int i = (low - 1);
+
+        for (int j = low; j <= high - 1; j++) {
+            if (students[j].getid() < pivot.getid()) {
+                i++;
+                swap(students[i], students[j]);
+            }
+        }
+        swap(students[i + 1], students[high]);
+        return (i + 1);
+    };
+
+    function<void(int, int)> quickSort;
+    quickSort = [&](int low, int high) {
+        if (low < high) {
+            int pi = partition(students, low, high);
+
+            quickSort(low, pi - 1);
+            quickSort(pi + 1, high);
+        }
+    };
+
+    quickSort(0, students.size() - 1);
 }
 
 void Student::addCourse(Course course) { courses.addCourse(course); }

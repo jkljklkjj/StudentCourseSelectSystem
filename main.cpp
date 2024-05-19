@@ -12,7 +12,6 @@ int main() {
     studentdata.init_data();
     coursedata.init_data();
     Login login;
-    login.begin();
 
     return 0;
 }

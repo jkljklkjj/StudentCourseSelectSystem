@@ -34,8 +34,10 @@ class Studentdata {
     vector<Student> students;
 
   public:
-    void init_data();                     // 初始化数据
-    void addStudent(const Student& student);             // 添加学生
-    Student findStudent(long long) const; // 查找学生
+    void init_data();                        // 初始化数据
+    void addStudent(const Student &student); // 添加学生
+    Student findStudent(long long) const;    // 查找学生
     void sortByid();
+    void changePassword(long long id, string password); // 修改密码
+    Student& find_TrueStudent(long long id);
 };

@@ -32,6 +32,7 @@ class Coursedata {
     void addCourse(Course);                            // 添加课程
     void removeCourse(const string &courseName); // 删除学生的某个课程
     void removeCourse(int courseId);             // 删除学生的某个课程
-    void displayCourses() const;                 // 展示学生的所有课程
+    void displayCourses() const;                 // 展示所有课程
     void displayCourse(const string &courseName); // 展示学生的某个课程的具体信息
+    void displayCourse(int courseId);             // 展示学生的某个课程的具体信息
 };

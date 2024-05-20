@@ -21,9 +21,9 @@ string Course::getname() const { return name; }
 
 void Course::display() const {
     cout << "课程ID: " << id << " ";
-    cout << "课程名称: " << name << " ";
-    cout << "课程学分: " << credit << " ";
-    cout << "课程教师: " << teacher << endl;
+    cout << "\t课程名称: " << name << " ";
+    cout << "\t课程学分: " << credit << " ";
+    cout << "\t课程教师: " << teacher << endl;
 }
 
 void Coursedata::init_data() {
@@ -90,15 +90,45 @@ void Coursedata::removeCourse(int courseId) {
     cout << "未找到课程" << courseId << endl;
 }
 
-Course Coursedata::findCourse(const string &courseName) const {
-    for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].getname() == courseName) {
-            courses[i].display();
-            return courses[i];
+int levenshteinDistance(const string &s1, const string &s2) {
+    //模糊匹配算法，使用了dp动态规划
+    int m = s1.size(), n = s2.size();
+    vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
+
+    for (int i = 1; i <= m; i++) dp[i][0] = i;
+    for (int j = 1; j <= n; j++) dp[0][j] = j;
+
+    for (int i = 1; i <= m; i++) {
+        for (int j = 1; j <= n; j++) {
+            if (s1[i - 1] == s2[j - 1])
+                dp[i][j] = dp[i - 1][j - 1];
+            else
+                dp[i][j] = min(min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]) + 1;
         }
     }
-    cout << "未找到课程" << courseName << endl;
-    return Course();
+
+    return dp[m][n];
+}
+
+Course Coursedata::findCourse(const string &courseName) const {
+    Course closestMatch;
+    int minDistance = INT_MAX;
+
+    for (const auto &course : courses) {
+        int distance = levenshteinDistance(course.getname(), courseName);
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestMatch = course;
+        }
+    }
+
+    if (minDistance > courseName.size() / 2) {
+        cout << "未找到课程" << courseName << endl;
+        return Course();
+    } else {
+        closestMatch.display();
+        return closestMatch;
+    }
 }
 
 Course Coursedata::findCourse(int courseId) const {
@@ -135,4 +165,13 @@ void Coursedata::displayCourse(const string &courseName) {
         }
     }
     cout << "未找到课程" << courseName << endl;
+}
+
+void Coursedata::displayCourse(int courseId) {
+    Course tmp = findCourse(courseId);
+    if (tmp.getid() == courseId) {
+        tmp.display();
+        return;
+    }
+    else cout << "未找到课程" << courseId << endl;
 }

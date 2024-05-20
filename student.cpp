@@ -1,6 +1,6 @@
 #include "student.h"
-#include <iostream>
 #include <functional>
+#include <iostream>
 using namespace std;
 
 Student::Student(long long id, string name, string password)
@@ -55,7 +55,9 @@ void Student::setStudent(long long id, string name, string password) {
     this->password = password;
 }
 
-void Studentdata::addStudent(const Student& student) { students.push_back(student); }
+void Studentdata::addStudent(const Student &student) {
+    students.push_back(student);
+}
 
 Student Studentdata::findStudent(long long id) const {
     int left = 0;
@@ -75,8 +77,27 @@ Student Studentdata::findStudent(long long id) const {
     return Student(); // 返回一个默认的 Student 对象
 }
 
-void Studentdata::sortByid() {//根据学号来进行快速排序
-    auto partition = [](vector<Student>& students, int low, int high) {
+Student &Studentdata::find_TrueStudent(long long id) {
+    int left = 0;
+    int right = students.size() - 1;
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (students[mid].getid() == id) {
+            return students[mid];
+        }
+        if (students[mid].getid() < id) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    cout << "未找到学号为" << id << "的学生" << endl;
+    static Student defaultStudent; // 定义一个静态的 Student 对象
+    return defaultStudent;         // 返回默认的 Student 对象
+}
+
+void Studentdata::sortByid() { // 根据学号来进行快速排序
+    auto partition = [](vector<Student> &students, int low, int high) {
         Student pivot = students[high];
         int i = (low - 1);
 
@@ -113,6 +134,13 @@ Course Student::findCourse(const string &courseName) const {
     return courses.findCourse(courseName);
 }
 
-Course Student::findCourse(int courseId) const { return courses.findCourse(courseId); }
+Course Student::findCourse(int courseId) const {
+    return courses.findCourse(courseId);
+}
 
 void Student::displayAllCourses() { courses.displayCourses(); }
+
+void Studentdata::changePassword(long long id, string password) {
+    Student student = findStudent(id);
+    student.setPassword(password);
+}

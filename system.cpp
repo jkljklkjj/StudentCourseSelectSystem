@@ -9,27 +9,33 @@ extern Coursedata coursedata;
 extern long long id;
 using namespace std;
 
+//-------------------------Login-------------------------start
 Login::Login() {
     Menu::login();
     times = 3;
     start();
 }
 
-void Login::signup(){
-    long long id;
-    cout<<"请输入您的学号";
-    cin>>id;
+void Login::signup(){//注册
+    long long tmp;
+    cout<<"请输入您的学号：";
+    cin>>tmp;
     string name;
-    cout<<"请输入您的名字";
+    cout<<"请输入您的名字：";
     cin>>name;
     string password;
-    cout<<"请输入您要的密码";
+    cout<<"请输入您要的密码：";
     cin>>password;
-    Student newstudent(id,name,password);
+    Student newstudent(tmp,name,password);
     studentdata.addStudent(newstudent);
+    cout<<"注册成功！"<<endl;
+    studentdata.sortByid();//重新排序
+    this_thread::sleep_for(chrono::seconds(3));
+    system("cls");
+    start();
 }
 
-bool Login::check(long long id, string password) {
+bool Login::check(string password) {
     Student student = studentdata.findStudent(id);
     if (student.getid() == id && student.getpassword() == password) {
         return true;
@@ -53,25 +59,23 @@ void Login::begin() {
         cin >> id;
         cout << "请输入您的密码：";
         cin >> password;
-        if (check(id, password)) {
+        if (check(password)) {
             cout << "登录成功！" << endl;
             cout << "欢迎您，" << studentdata.findStudent(id).getname() << "同学！"
                  << endl;
             this_thread::sleep_for(chrono::seconds(3));
-            system("cls");
             break;
         } else {
             cout << "登录失败！" << endl;
         }
     }
+    Menu::main_menu();
 }
 
 void Login::start() {
     while (true) {
-        cout << "请输入1登录，2注册：";
         int choice;
         cin >> choice;
-
         switch (choice) {
             case 1:
                 begin();
@@ -85,3 +89,4 @@ void Login::start() {
         }
     }
 }
+//-------------------------Login-------------------------end

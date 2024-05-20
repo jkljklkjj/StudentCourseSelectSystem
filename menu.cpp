@@ -83,14 +83,14 @@ void Menu::course_menu() { // 选课
     switch (choice) {
     case 1:
         coursedata.displayCourses();
-        cout << "请输入任意字符以返回";
+        cout << "请输入任意字符以返回：";
         cin >> tmp;
         if (tmp)
             course_menu();
         break;
     case 2:
         studentdata.findStudent(id).displayAllCourses();
-        cout << "请输入任意字符以返回";
+        cout << "请输入任意字符以返回：";
         cin >> tmp;
         if (tmp)
             course_menu();

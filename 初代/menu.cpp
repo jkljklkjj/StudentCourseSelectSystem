@@ -73,16 +73,13 @@ void Menu::course_menu() { // 选课
     cout << "\t\t1. 查看所有可选课程" << endl;
     cout << "\t\t2. 查看已选课程" << endl;
     cout << "\t\t3. 选课" << endl;
-    cout << "\t\t4. 搜索课程" << endl;
     cout << "\t\t4. 返回主菜单" << endl;
     cout << "==============================================" << endl;
     cout << "请输入您的选择：";
     int choice;
     cin >> choice;
-    string courseid;
+    int courseid;
     char tmp;
-    string coursename;
-    bool isNumber = true;
     switch (choice) {
     case 1:
         coursedata.displayCourses();
@@ -99,29 +96,19 @@ void Menu::course_menu() { // 选课
             course_menu();
         break;
     case 3:
-        cout << "请输入课程号或者课程名称：";
+        coursedata.displayCourses();
+        cout << "请输入您要选的课程号：";
+        int courseid;
         cin >> courseid;
-        for (char c : courseid) {
-            if (!isdigit(c)) {
-                isNumber = false;
-                break;
-            }
-        }
-        if (isNumber) {
-            int courseIdAsInt = stoi(courseid);
-            studentdata.findStudent(id).addCourse(
-                coursedata.find_TrueCourse(courseIdAsInt));
-        } else {
-            studentdata.findStudent(id).addCourse(
-                coursedata.find_TrueCourse(courseid));
-        }
+        studentdata.find_TrueStudent(id).addCourse(
+            coursedata.findCourse(courseid));
+        cout << "选课成功！" << endl;
+        cout << "请输入任意字符以返回";
+        cin >> tmp;
+        if (tmp)
+            course_menu();
         break;
     case 4:
-        cout << "请输入课程名称：";
-        cin >> coursename;
-        coursedata.findCourse(coursename);
-        break;
-    case 5:
         main_menu();
         break;
     }
@@ -171,7 +158,7 @@ void Menu::drop_course() { // 退课
         int courseid;
         cin >> courseid;
         studentdata.find_TrueStudent(id).removeCourse(
-            coursedata.find_TrueCourse(courseid).getname());
+            coursedata.findCourse(courseid).getname());
         cout << "退课成功！" << endl;
         this_thread::sleep_for(chrono::seconds(3));
         drop_course();

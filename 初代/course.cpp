@@ -110,19 +110,7 @@ int levenshteinDistance(const string &s1, const string &s2) {
     return dp[m][n];
 }
 
-void Coursedata::findCourse(const string &courseName) const {
-    //展示所有模糊匹配的课程
-    int threshold = 3;//模糊匹配阈值
-
-    for (const auto &course : courses) {
-        int distance = levenshteinDistance(course.getname(), courseName);
-        if (distance <= threshold) {
-            course.display();
-        }
-    }
-}
-
-Course Coursedata::find_TrueCourse(const string &courseName) const {
+Course Coursedata::findCourse(const string &courseName) const {
     Course closestMatch;
     int minDistance = INT_MAX;
 
@@ -138,11 +126,12 @@ Course Coursedata::find_TrueCourse(const string &courseName) const {
         cout << "未找到课程" << courseName << endl;
         return Course();
     } else {
+        closestMatch.display();
         return closestMatch;
     }
 }
 
-Course Coursedata::find_TrueCourse(int courseId) const {
+Course Coursedata::findCourse(int courseId) const {
     // 使用二分查找，把复杂度降低到O(logn)
     int left = 0;
     int right = courses.size() - 1;
@@ -179,7 +168,7 @@ void Coursedata::displayCourse(const string &courseName) {
 }
 
 void Coursedata::displayCourse(int courseId) {
-    Course tmp = find_TrueCourse(courseId);
+    Course tmp = findCourse(courseId);
     if (tmp.getid() == courseId) {
         tmp.display();
         return;

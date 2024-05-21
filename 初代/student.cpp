@@ -35,11 +35,9 @@ void Studentdata::init_data() {
 }
 
 void Student::display() const {
-    cout << "学生ID: " << id;
-    cout << "学生姓名: " << name;
-}
-
-void Student::displayAllCourses() {
+    cout << "学生ID: " << id << endl;
+    cout << "学生姓名: " << name << endl;
+    cout << "学生所选课程: " << endl;
     courses.displayCourses();
 }
 
@@ -133,11 +131,11 @@ void Student::removeCourse(const string &courseName) {
 }
 
 Course Student::findCourse(const string &courseName) const {
-    return courses.find_TrueCourse(courseName);
+    return courses.findCourse(courseName);
 }
 
 Course Student::findCourse(int courseId) const {
-    return courses.find_TrueCourse(courseId);
+    return courses.findCourse(courseId);
 }
 
 void Student::displayAllCourses() { courses.displayCourses(); }
@@ -145,28 +143,4 @@ void Student::displayAllCourses() { courses.displayCourses(); }
 void Studentdata::changePassword(long long id, string password) {
     Student student = findStudent(id);
     student.setPassword(password);
-}
-
-void Studentdata::displayAllStudents() {
-    for (int i = 0; i < students.size(); i++) {
-        students[i].display();
-    }
-}
-
-void Studentdata::removeStudent(long long id) {
-    int left = 0;
-    int right = students.size() - 1;
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (students[mid].getid() == id) {
-            students.erase(students.begin() + mid);
-            cout << "学生" << id << "已删除" << endl;
-            return;
-        } else if (students[mid].getid() < id) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
-    }
-    cout << "未找到学生" << id << endl;
 }

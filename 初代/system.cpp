@@ -1,13 +1,11 @@
 #include "system.h"
 #include "student.h"
 #include "menu.h"
-#include "admin.h"
 #include <iostream>
 #include <thread>
 
 extern Studentdata studentdata;
 extern Coursedata coursedata;
-extern Admindata admindata;
 extern long long id;
 using namespace std;
 
@@ -66,12 +64,12 @@ void Login::begin() {
             cout << "欢迎您，" << studentdata.findStudent(id).getname() << "同学！"
                  << endl;
             this_thread::sleep_for(chrono::seconds(3));
-            Menu::main_menu();
             break;
         } else {
             cout << "登录失败！" << endl;
         }
     }
+    Menu::main_menu();
 }
 
 void Login::start() {

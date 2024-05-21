@@ -27,9 +27,8 @@ class Coursedata {
 
   public:
     void init_data();
-    void findCourse(const string &courseName) const; // 查找课程
-    Course find_TrueCourse(const string &courseName) const;             // 查找课程
-    Course find_TrueCourse(int courseId) const;             // 查找课程
+    Course findCourse(const string &courseName) const; // 查找课程
+    Course findCourse(int courseId) const;             // 查找课程
     void addCourse(Course);                            // 添加课程
     void removeCourse(const string &courseName); // 删除学生的某个课程
     void removeCourse(int courseId);             // 删除学生的某个课程

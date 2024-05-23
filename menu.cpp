@@ -192,6 +192,7 @@ void Menu::resetpassword()
 
 void Menu::drop_course()
 { // 退课
+    system("cls");
     cout << "==================== 退课 ====================" << endl;
     cout << "\t\t1. 查看已选课程" << endl;
     cout << "\t\t2. 退课" << endl;

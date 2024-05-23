@@ -23,7 +23,7 @@ void Menu::login()
 
 void Menu::main_menu()
 { // 主菜单
-    //system("cls");
+    system("cls");
     cout << "==================== 主菜单 ====================" << endl;
     cout << "\t\t1. 课程一览" << endl;
     cout << "\t\t2. 修改密码" << endl;
@@ -36,7 +36,7 @@ void Menu::main_menu()
     {
         int choice;
         cin >> choice;
-        //system("cls");
+        system("cls");
         switch (choice)
         {
         case 1:
@@ -74,7 +74,7 @@ void Menu::show_course()
 
 void Menu::course_menu()
 { // 选课
-    //system("cls");
+    system("cls");
     cout << "==================== 选课 ====================" << endl;
     cout << "\t\t1. 查看所有可选课程" << endl;
     cout << "\t\t2. 查看已选课程" << endl;

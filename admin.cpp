@@ -41,7 +41,7 @@ void Admindata::init_data() {
 }
 
 void Admin::main_menu() {
-    //system("cls");
+    system("cls");
     cout << "================== 管理员菜单 ===================" << endl;
     cout << "\t\t1. 学生菜单" << endl;
     cout << "\t\t2. 课程菜单" << endl;
@@ -74,7 +74,7 @@ void Admin::main_menu() {
 }
 
 void Admin::student_menu() {
-    //system("cls");
+    system("cls");
     cout << "================== 学生菜单 ===================" << endl;
     cout << "\t\t1. 添加学生" << endl;
     cout << "\t\t2. 删除学生" << endl;
@@ -137,7 +137,7 @@ void Admin::student_menu() {
 }
 
 void Admin::course_menu() {
-    //system("cls");
+    system("cls");
     cout << "================== 课程菜单 ===================" << endl;
     cout << "\t\t1. 添加课程" << endl;
     cout << "\t\t2. 删除课程" << endl;

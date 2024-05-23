@@ -27,13 +27,13 @@ class Coursedata {
 
   public:
     void init_data();
-    void findCourse(const string &courseName) const; // 查找课程
-    Course find_TrueCourse(const string &courseName) const;             // 查找课程
+    void findCourse(const string &courseName) const;        // 查找课程
+    Course find_TrueCourse(const string &courseName) const; // 查找课程
     Course find_TrueCourse(int courseId) const;             // 查找课程
-    void addCourse(Course);                            // 添加课程
+    void addCourse(Course);                                 // 添加课程
     void removeCourse(const string &courseName); // 删除学生的某个课程
     void removeCourse(int courseId);             // 删除学生的某个课程
     void displayCourses() const;                 // 展示所有课程
     void displayCourse(const string &courseName); // 展示学生的某个课程的具体信息
-    void displayCourse(int courseId);             // 展示学生的某个课程的具体信息
+    void displayCourse(int courseId); // 展示学生的某个课程的具体信息
 };

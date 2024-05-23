@@ -1,27 +1,36 @@
 #include "student.h"
-#include <functional>
+#include "system.h"
 #include <iostream>
+#include <thread>
+#include <functional>
+#include <algorithm>
 using namespace std;
 
 Student::Student(long long id, string name, string password)
     : id(id), name(name), password(password) {}
 
-Student::Student() {}
+Student::Student()
+{
+    id = 0;
+    name = "";
+    password = "";
+}
 
 Student::~Student() {}
 
-void Studentdata::init_data() {
-    Student student1(20232005036, "陈振业", "123456");
-    Student student2(2, "李四", "123456");
-    Student student3(3, "王五", "123456");
-    Student student4(4, "赵六", "123456");
-    Student student5(5, "孙七", "123456");
-    Student student6(6, "周八", "123456");
-    Student student7(7, "吴九", "123456");
-    Student student8(8, "郑十", "123456");
-    Student student9(9, "钱十一", "123456");
-    Student student10(10, "马十二", "123456");
-    Student student11(11, "test", "abc123");
+void Studentdata::init_data()
+{
+    Student student1(20232005036, "陈振业", Login::caesarEncrypt("123456"));
+    Student student2(2, "李四", Login::caesarEncrypt("123456"));
+    Student student3(3, "王五", Login::caesarEncrypt("123456"));
+    Student student4(4, "赵六", Login::caesarEncrypt("123456"));
+    Student student5(5, "孙七", Login::caesarEncrypt("123456"));
+    Student student6(6, "周八", Login::caesarEncrypt("123456"));
+    Student student7(7, "吴九", Login::caesarEncrypt("123456"));
+    Student student8(8, "郑十", Login::caesarEncrypt("123456"));
+    Student student9(9, "钱十一", Login::caesarEncrypt("123456"));
+    Student student10(10, "马十二", Login::caesarEncrypt("123456"));
+    Student student11(11, "test", Login::caesarEncrypt("abc123"));
     addStudent(student1);
     addStudent(student2);
     addStudent(student3);
@@ -32,46 +41,58 @@ void Studentdata::init_data() {
     addStudent(student8);
     addStudent(student9);
     addStudent(student10);
+    sortByid();
 }
 
-void Student::display() const {
+void Student::display() const
+{
     cout << "学生ID: " << id;
-    cout << "学生姓名: " << name;
+    cout << "\t学生姓名: " << name;
 }
 
-void Student::displayAllCourses() {
-    courses.displayCourses();
+void Student::displayAllCourses()
+{
+    StudentCourses.displayCourses();
 }
 
 void Student::setPassword(string password) { this->password = password; }
 
-int Student::getid() const { return id; }
+long long Student::getid() const { return id; }
 
 string Student::getpassword() const { return password; }
 
 string Student::getname() const { return name; }
 
-void Student::setStudent(long long id, string name, string password) {
+void Student::setStudent(long long id, string name, string password)
+{
     this->id = id;
     this->name = name;
     this->password = password;
 }
 
-void Studentdata::addStudent(const Student &student) {
+void Studentdata::addStudent(const Student &student)
+{
     students.push_back(student);
+    sortByid();
 }
 
-Student Studentdata::findStudent(long long id) const {
+Student Studentdata::findStudent(long long id) const
+{
     int left = 0;
     int right = students.size() - 1;
-    while (left <= right) {
+    while (left <= right)
+    {
         int mid = left + (right - left) / 2;
-        if (students[mid].getid() == id) {
+        if (students[mid].getid() == id)
+        {
             return students[mid];
         }
-        if (students[mid].getid() < id) {
+        if (students[mid].getid() < id)
+        {
             left = mid + 1;
-        } else {
+        }
+        else
+        {
             right = mid - 1;
         }
     }
@@ -79,17 +100,23 @@ Student Studentdata::findStudent(long long id) const {
     return Student(); // 返回一个默认的 Student 对象
 }
 
-Student &Studentdata::find_TrueStudent(long long id) {
+Student &Studentdata::find_TrueStudent(long long id)
+{
     int left = 0;
     int right = students.size() - 1;
-    while (left <= right) {
+    while (left <= right)
+    {
         int mid = left + (right - left) / 2;
-        if (students[mid].getid() == id) {
+        if (students[mid].getid() == id)
+        {
             return students[mid];
         }
-        if (students[mid].getid() < id) {
+        if (students[mid].getid() < id)
+        {
             left = mid + 1;
-        } else {
+        }
+        else
+        {
             right = mid - 1;
         }
     }
@@ -98,13 +125,17 @@ Student &Studentdata::find_TrueStudent(long long id) {
     return defaultStudent;         // 返回默认的 Student 对象
 }
 
-void Studentdata::sortByid() { // 根据学号来进行快速排序
-    auto partition = [](vector<Student> &students, int low, int high) {
+void Studentdata::sortByid()
+{ // 根据学号来进行快速排序
+    auto partition = [](vector<Student> &students, int low, int high)
+    {
         Student pivot = students[high];
         int i = (low - 1);
 
-        for (int j = low; j <= high - 1; j++) {
-            if (students[j].getid() < pivot.getid()) {
+        for (int j = low; j <= high - 1; j++)
+        {
+            if (students[j].getid() < pivot.getid())
+            {
                 i++;
                 swap(students[i], students[j]);
             }
@@ -114,8 +145,10 @@ void Studentdata::sortByid() { // 根据学号来进行快速排序
     };
 
     function<void(int, int)> quickSort;
-    quickSort = [&](int low, int high) {
-        if (low < high) {
+    quickSort = [&](int low, int high)
+    {
+        if (low < high)
+        {
             int pi = partition(students, low, high);
 
             quickSort(low, pi - 1);
@@ -126,45 +159,60 @@ void Studentdata::sortByid() { // 根据学号来进行快速排序
     quickSort(0, students.size() - 1);
 }
 
-void Student::addCourse(Course course) { courses.addCourse(course); }
-
-void Student::removeCourse(const string &courseName) {
-    courses.removeCourse(courseName);
+void Student::addCourse(Course course)
+{
+    StudentCourses.addCourse(course);
 }
 
-Course Student::findCourse(const string &courseName) const {
-    return courses.find_TrueCourse(courseName);
+void Student::removeCourse(const string &courseName)
+{
+    StudentCourses.removeCourse(courseName);
 }
 
-Course Student::findCourse(int courseId) const {
-    return courses.find_TrueCourse(courseId);
+Course Student::findCourse(const string &courseName) const
+{
+    return StudentCourses.find_TrueCourse(courseName);
 }
 
-void Student::displayAllCourses() { courses.displayCourses(); }
+Course Student::findCourse(int courseId) const
+{
+    return StudentCourses.find_TrueCourse(courseId);
+}
 
-void Studentdata::changePassword(long long id, string password) {
+void Studentdata::changePassword(long long id, string password)
+{
     Student student = findStudent(id);
     student.setPassword(password);
 }
 
-void Studentdata::displayAllStudents() {
-    for (int i = 0; i < students.size(); i++) {
+void Studentdata::displayAllStudents()
+{
+    for (int i = 0; i < students.size(); i++)
+    {
         students[i].display();
+        cout << endl;
     }
 }
 
-void Studentdata::removeStudent(long long id) {
+void Studentdata::removeStudent(long long id)
+{
     int left = 0;
     int right = students.size() - 1;
-    while (left <= right) {
+    while (left <= right)
+    {
         int mid = left + (right - left) / 2;
-        if (students[mid].getid() == id) {
+        if (students[mid].getid() == id)
+        {
             students.erase(students.begin() + mid);
             cout << "学生" << id << "已删除" << endl;
             return;
-        } else if (students[mid].getid() < id) {
+        }
+        else if (students[mid].getid() < id)
+        {
             left = mid + 1;
-        } else {
+        }
+        else
+        {
             right = mid - 1;
         }
     }

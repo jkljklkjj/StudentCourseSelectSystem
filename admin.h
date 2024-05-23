@@ -5,28 +5,26 @@
 
 class Admin {
     private:
-        long long id;
         string name;
         string password;
+        long long admin_id;
     public:
         Admin(long long id, string name, string password);
-        void getid() const;
-        void getname() const;
-        void getpassword() const;
-        void main_menu();
-        void student_menu();
-        void course_menu();
-        void changePassword(long long id, string password);
+        Admin();
+        long long getid() const;
+        string getname() const;
+        string getpassword() const;
+        void setpassword(string password);
+        static void main_menu();
+        static void student_menu();
+        static void course_menu();
+        void changePassword(string);
 };
 
 class Admindata {
     private:
-        vector<Admin> admins;
+        vector<Admin> admindata;
     public:
         void init_data();
-        void addAdmin(const Admin &admin);
-        void removeAdmin(long long id);
-        Admin findAdmin(long long id) const;
-        void sortByid();
-        void changePassword(long long id, string password);
+        Admin& findAdmin(long long id);
 };

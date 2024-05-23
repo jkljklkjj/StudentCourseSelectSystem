@@ -10,7 +10,7 @@ class Student {
     long long id;
     string name;
     string password;
-    Coursedata courses;
+    Coursedata StudentCourses;
 
   public:
     Student();
@@ -20,14 +20,13 @@ class Student {
     void display() const;       // 展示学生信息
     void displayAllCourses();   // 展示所有课程
     void setPassword(string);   // 设置密码
-    int getid() const;          // 获取学生id
+    long long getid() const;          // 获取学生id
     string getname() const;     // 获取学生姓名
     string getpassword() const; // 添加课程
     void addCourse(Course);
     void removeCourse(const string &courseName);
     Course findCourse(const string &courseName) const;
     Course findCourse(int courseId) const;
-    void displayAllCourses();
 };
 
 class Studentdata {

@@ -1,5 +1,7 @@
 #include "course.h"
 #include <iostream>
+#include <map>
+#include <vector>
 using namespace std;
 
 Course::Course() {
@@ -66,7 +68,9 @@ void Coursedata::init_data() {
     courses.push_back(course18);
 }
 
-void Coursedata::addCourse(Course course) { courses.push_back(course); }
+void Coursedata::addCourse(Course course) {
+    courses.push_back(course);
+    }
 
 void Coursedata::removeCourse(const string &courseName) {
     for (int i = 0; i < courses.size(); i++) {
@@ -90,55 +94,74 @@ void Coursedata::removeCourse(int courseId) {
     cout << "未找到课程" << courseId << endl;
 }
 
-int levenshteinDistance(const string &s1, const string &s2) {
-    //模糊匹配算法，使用了dp动态规划
+int longestCommonSubsequence(const string &s1, const string &s2) {
     int m = s1.size(), n = s2.size();
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
 
-    for (int i = 1; i <= m; i++) dp[i][0] = i;
-    for (int j = 1; j <= n; j++) dp[0][j] = j;
-
     for (int i = 1; i <= m; i++) {
         for (int j = 1; j <= n; j++) {
-            if (s1[i - 1] == s2[j - 1])
-                dp[i][j] = dp[i - 1][j - 1];
-            else
-                dp[i][j] = min(min(dp[i - 1][j - 1], dp[i - 1][j]), dp[i][j - 1]) + 1;
+            if (s1[i - 1] == s2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+            } else {
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
+            }
         }
     }
-
     return dp[m][n];
 }
 
 void Coursedata::findCourse(const string &courseName) const {
-    //展示所有模糊匹配的课程
-    int threshold = 3;//模糊匹配阈值
+    // 展示所有模糊匹配的课程
+    map<int, vector<Course>, greater<int>> matchedCourses;
 
     for (const auto &course : courses) {
-        int distance = levenshteinDistance(course.getname(), courseName);
-        if (distance <= threshold) {
+        int matchLength =
+            longestCommonSubsequence(course.getname(), courseName);
+        if (matchLength > 0) {
+            matchedCourses[matchLength].push_back(course);
+        }
+    }
+
+    for (const auto &pair : matchedCourses) {
+        for (const auto &course : pair.second) {
             course.display();
         }
     }
 }
 
 Course Coursedata::find_TrueCourse(const string &courseName) const {
-    Course closestMatch;
     int minDistance = INT_MAX;
 
+    map<int, vector<Course>, greater<int>> matchedCourses;
+
     for (const auto &course : courses) {
-        int distance = levenshteinDistance(course.getname(), courseName);
-        if (distance < minDistance) {
-            minDistance = distance;
-            closestMatch = course;
+        int matchLength =
+            longestCommonSubsequence(course.getname(), courseName);
+        if (matchLength > 0) {
+            matchedCourses[matchLength].push_back(course);
         }
     }
 
-    if (minDistance > courseName.size() / 2) {
+    if (minDistance==0) {
         cout << "未找到课程" << courseName << endl;
         return Course();
     } else {
-        return closestMatch;
+        if (minDistance > 3)
+            return matchedCourses.begin()->second[0];
+        else {
+            cout << "您要找的课程是不是：" << matchedCourses.begin()->second[0].getid() << " "
+                 << matchedCourses.begin()->second[0].getname() << "？" << endl;
+            cout << "请输入课程ID以确认：" << endl;
+            int courseId;
+            cin >> courseId;
+            if (courseId == matchedCourses.begin()->second[0].getid()) {
+                matchedCourses.begin()->second[0].display();
+                return matchedCourses.begin()->second[0];
+            } else {
+                cout << "未找到课程" << courseName << endl;
+                return Course();
+            }
+        }
     }
 }
 
@@ -183,6 +206,6 @@ void Coursedata::displayCourse(int courseId) {
     if (tmp.getid() == courseId) {
         tmp.display();
         return;
-    }
-    else cout << "未找到课程" << courseId << endl;
+    } else
+        cout << "未找到课程" << courseId << endl;
 }

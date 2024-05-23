@@ -2,27 +2,51 @@
 #include "course.h"
 #include "menu.h"
 #include "student.h"
+#include "system.h"
 #include <iostream>
 #include <thread>
 
 extern Coursedata coursedata;
 extern Studentdata studentdata;
+extern Admindata admindata;
 extern long long id;
 
 using namespace std;
 
 Admin::Admin(long long id, string name, string password) {
-    this->id = id;
+    this->admin_id = id;
     this->name = name;
     this->password = password;
 }
 
+Admin::Admin() {
+    this->admin_id = 0;
+    this->name = "";
+    this->password = "";
+}
+
+long long Admin::getid() const { return id; }
+
+string Admin::getname() const { return name; }
+
+string Admin::getpassword() const { return password; }
+
+void Admin::setpassword(string password) { this->password = password; }
+
+void Admindata::init_data() {
+    Admin admin1(2019001, "admin1", Login::caesarEncrypt("123456"));
+    Admin admin2(2019002, "admin2", Login::caesarEncrypt("123456"));
+    admindata.push_back(admin1);
+    admindata.push_back(admin2);
+}
+
 void Admin::main_menu() {
+    //system("cls");
     cout << "================== 管理员菜单 ===================" << endl;
-    cout << "\t1. 学生菜单" << endl;
-    cout << "\t2. 课程菜单" << endl;
-    cout << "\t3. 修改密码" << endl;
-    cout << "\t4. 退出登录" << endl;
+    cout << "\t\t1. 学生菜单" << endl;
+    cout << "\t\t2. 课程菜单" << endl;
+    cout << "\t\t3. 修改密码" << endl;
+    cout << "\t\t4. 退出登录" << endl;
     cout << "================================================" << endl;
     cout << "请输入您的选择：";
     int choice;
@@ -38,7 +62,7 @@ void Admin::main_menu() {
     case 3:
         cout << "请输入新密码：";
         cin >> password;
-        changePassword(id, password);
+        admindata.findAdmin(id).changePassword(password);
         break;
     case 4:
         cout << "退出成功！" << endl;
@@ -50,17 +74,19 @@ void Admin::main_menu() {
 }
 
 void Admin::student_menu() {
+    //system("cls");
     cout << "================== 学生菜单 ===================" << endl;
-    cout << "\t1. 添加学生" << endl;
-    cout << "\t2. 删除学生" << endl;
-    cout << "\t4. 查找学生" << endl;
-    cout << "\t5. 显示所有学生" << endl;
-    cout << "\t6. 返回主菜单" << endl;
+    cout << "\t\t1. 添加学生" << endl;
+    cout << "\t\t2. 删除学生" << endl;
+    cout << "\t\t3. 查找学生" << endl;
+    cout << "\t\t4. 显示所有学生" << endl;
+    cout << "\t\t5. 返回主菜单" << endl;
     cout << "================================================" << endl;
     cout << "请输入您的选择：";
     int choice;
     cin >> choice;
     long long student_id;
+    char tmp;
     string student_name;
     string student_password;
     Student student;
@@ -82,7 +108,6 @@ void Admin::student_menu() {
         cout << "请输入学生学号" << endl;
         cin >> student_id;
         studentdata.removeStudent(student_id);
-        cout << "删除成功！" << endl;
         this_thread::sleep_for(chrono::seconds(2));
         student_menu();
         break;
@@ -90,16 +115,16 @@ void Admin::student_menu() {
         cout << "请输入学生学号" << endl;
         cin >> student_id;
         student = studentdata.findStudent(student_id);
-        student.display();
+        if(student.getid()!=0)student.display();
         student.displayAllCourses();
-        cout<<"按任意键继续"<<endl;
-        getchar();
+        cout << endl << "按任意键继续" << endl;
+        cin >> tmp;
         student_menu();
         break;
     case 4:
         studentdata.displayAllStudents();
-        cout<<"按任意键继续"<<endl;
-        getchar();
+        cout << endl << "按任意键继续" << endl;
+        cin >> tmp;
         student_menu();
         break;
     case 5:
@@ -112,17 +137,19 @@ void Admin::student_menu() {
 }
 
 void Admin::course_menu() {
+    //system("cls");
     cout << "================== 课程菜单 ===================" << endl;
-    cout << "\t1. 添加课程" << endl;
-    cout << "\t2. 删除课程" << endl;
-    cout << "\t3. 查找课程" << endl;
-    cout << "\t4. 显示所有课程" << endl;
-    cout << "\t5. 返回主菜单" << endl;
+    cout << "\t\t1. 添加课程" << endl;
+    cout << "\t\t2. 删除课程" << endl;
+    cout << "\t\t3. 查找课程" << endl;
+    cout << "\t\t4. 显示所有课程" << endl;
+    cout << "\t\t5. 返回主菜单" << endl;
     cout << "================================================" << endl;
     cout << "请输入您的选择：";
     int choice;
     cin >> choice;
     int course_id;
+    char tmp;
     string course_name;
     string course_teacher;
     int course_credit;
@@ -155,14 +182,15 @@ void Admin::course_menu() {
         cout << "请输入课程名" << endl;
         cin >> course_name;
         coursedata.findCourse(course_name);
-        cout<<"按任意键继续"<<endl;
-        getchar();
-        course_menu();
+        cout << "按任意键继续" << endl;
+        cin >> tmp;
+        if (tmp)
+            course_menu();
         break;
     case 4:
         coursedata.displayCourses();
-        cout<<"按任意键继续"<<endl;
-        getchar();
+        cout << "按任意键继续" << endl;
+        cin >> tmp;
         course_menu();
         break;
     case 5:
@@ -174,9 +202,21 @@ void Admin::course_menu() {
     }
 }
 
-void Admin::changePassword(long long id, string password) {
-    Admindata.changePassword(id, password);
+void Admin::changePassword(string password) {
+    Admin admin = admindata.findAdmin(id);
+    admin.setpassword(Login::caesarEncrypt(password));
     cout << "修改成功！" << endl;
     this_thread::sleep_for(chrono::seconds(2));
     main_menu();
+}
+
+Admin &Admindata::findAdmin(long long id) {
+    for (Admin &admin : admindata) {
+        if (admin.getid() == id) {
+            return admin;
+        }
+    }
+    cout << "未找到管理员" << endl;
+    static Admin defaultAdmin;
+    return defaultAdmin;
 }

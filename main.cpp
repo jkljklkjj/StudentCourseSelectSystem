@@ -10,7 +10,8 @@ Coursedata coursedata;
 Admindata admindata;
 long long id;
 
-int main() {
+int main()
+{
     studentdata.init_data();
     coursedata.init_data();
     admindata.init_data();

@@ -174,7 +174,7 @@ Course Student::findCourse(const string &courseName) const
     return StudentCourses.find_TrueCourse(courseName);
 }
 
-Course Student::findCourse(int courseId) const
+Course Student::findCourse(int courseId)
 {
     return StudentCourses.find_TrueCourse(courseId);
 }

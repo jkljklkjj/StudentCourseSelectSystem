@@ -80,7 +80,8 @@ void Menu::course_menu()
     cout << "\t\t2. 查看已选课程" << endl;
     cout << "\t\t3. 选课" << endl;
     cout << "\t\t4. 搜索课程" << endl;
-    cout << "\t\t5. 返回主菜单" << endl;
+    cout << "\t\t5. 评论课程" << endl;
+    cout << "\t\t6. 返回主菜单" << endl;
     cout << "==============================================" << endl;
     cout << "请输入您的选择：";
     int choice;
@@ -90,6 +91,7 @@ void Menu::course_menu()
     string coursename;
     bool isNumber = true;
     Course course;
+    Course *TrueCourse;
     switch (choice)
     {
     case 1:
@@ -157,6 +159,59 @@ void Menu::course_menu()
             course_menu();
         break;
     case 5:
+        system("cls");
+        cout << "==================== 评论课程 ====================\n"
+             << "\t\t1. 评论课程\n"
+             << "\t\t2. 查看评论\n"
+             << "\t\t3. 返回课程菜单\n"
+             << "==================================================\n"
+             << "请输入您的选择：";
+        int choice;
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            cout << "请输入课程号：";
+            cin >> courseid;
+            TrueCourse = &coursedata.find_TrueCourse(stoi(courseid));
+            if (TrueCourse->getname().empty() && TrueCourse->getid() == 0)
+            {
+                cout << "没有找到课程" << endl;
+            }
+            else
+            {
+                cout << "请输入评论：";
+                string comment;
+                cin >> comment;
+                TrueCourse->addComment(comment);
+                cout << "评论成功！" << endl;
+            }
+            this_thread::sleep_for(chrono::seconds(2));
+            course_menu();
+            break;
+        case 2:
+            cout << "请输入课程号：";
+            cin >> courseid;
+            TrueCourse = &coursedata.find_TrueCourse(stoi(courseid));
+            if (TrueCourse->getname().empty() && TrueCourse->getid() == 0)
+            {
+                cout << "没有找到课程" << endl;
+            }
+            else
+            {
+                TrueCourse->show_comments();
+            }
+            cout << "请输入任意字符以返回：";
+            cin >> tmp;
+            if (tmp)
+                course_menu();
+            break;
+        case 3:
+            course_menu();
+            break;
+        }
+
+    case 6:
         main_menu();
         break;
     }
@@ -197,7 +252,7 @@ void Menu::drop_course()
     cout << "\t\t1. 查看已选课程" << endl;
     cout << "\t\t2. 退课" << endl;
     cout << "\t\t3. 返回主菜单" << endl;
-    cout << "==================================================" << endl;
+    cout << "==============================================" << endl;
     cout << "请输入您的选择：";
     int choice;
     cin >> choice;

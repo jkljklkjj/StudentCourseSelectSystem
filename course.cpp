@@ -2,9 +2,14 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <ctime>
+#include <chrono>
 using namespace std;
 
-Course::Course() {
+extern Coursedata coursedata;
+
+Course::Course()
+{
     id = 0;
     name = "";
     teacher = "";
@@ -21,14 +26,16 @@ int Course::getid() const { return id; }
 
 string Course::getname() const { return name; }
 
-void Course::display() const {
+void Course::display() const
+{
     cout << "课程ID: " << id << " ";
     cout << "\t课程名称: " << name << " ";
     cout << "\t课程学分: " << credit << " ";
     cout << "\t课程教师: " << teacher << endl;
 }
 
-void Coursedata::init_data() {
+void Coursedata::init_data()
+{
     Course course1(1, "高等数学", "张三", 4);
     Course course2(2, "线性代数", "李四", 3);
     Course course3(3, "大学英语", "王五", 2);
@@ -68,13 +75,17 @@ void Coursedata::init_data() {
     courses.push_back(course18);
 }
 
-void Coursedata::addCourse(Course course) {
+void Coursedata::addCourse(Course course)
+{
     courses.push_back(course);
-    }
+}
 
-void Coursedata::removeCourse(const string &courseName) {
-    for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].getname() == courseName) {
+void Coursedata::removeCourse(const string &courseName)
+{
+    for (int i = 0; i < courses.size(); i++)
+    {
+        if (courses[i].getname() == courseName)
+        {
             courses.erase(courses.begin() + i);
             cout << "课程" << courseName << "已删除" << endl;
             return;
@@ -83,9 +94,12 @@ void Coursedata::removeCourse(const string &courseName) {
     cout << "未找到课程" << courseName << endl;
 }
 
-void Coursedata::removeCourse(int courseId) {
-    for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].getid() == courseId) {
+void Coursedata::removeCourse(int courseId)
+{
+    for (int i = 0; i < courses.size(); i++)
+    {
+        if (courses[i].getid() == courseId)
+        {
             courses.erase(courses.begin() + i);
             cout << "课程" << courseId << "已删除" << endl;
             return;
@@ -94,15 +108,21 @@ void Coursedata::removeCourse(int courseId) {
     cout << "未找到课程" << courseId << endl;
 }
 
-int longestCommonSubsequence(const string &s1, const string &s2) {
+int longestCommonSubsequence(const string &s1, const string &s2)
+{
     int m = s1.size(), n = s2.size();
     vector<vector<int>> dp(m + 1, vector<int>(n + 1, 0));
 
-    for (int i = 1; i <= m; i++) {
-        for (int j = 1; j <= n; j++) {
-            if (s1[i - 1] == s2[j - 1]) {
+    for (int i = 1; i <= m; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (s1[i - 1] == s2[j - 1])
+            {
                 dp[i][j] = dp[i - 1][j - 1] + 1;
-            } else {
+            }
+            else
+            {
                 dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
             }
         }
@@ -110,54 +130,69 @@ int longestCommonSubsequence(const string &s1, const string &s2) {
     return dp[m][n];
 }
 
-void Coursedata::findCourse(const string &courseName) const {
+void Coursedata::findCourse(const string &courseName) const
+{
     // 展示所有模糊匹配的课程
     map<int, vector<Course>, greater<int>> matchedCourses;
 
-    for (const auto &course : courses) {
+    for (const auto &course : courses)
+    {
         int matchLength =
             longestCommonSubsequence(course.getname(), courseName);
-        if (matchLength > 0) {
+        if (matchLength > 0)
+        {
             matchedCourses[matchLength].push_back(course);
         }
     }
 
-    for (const auto &pair : matchedCourses) {
-        for (const auto &course : pair.second) {
+    for (const auto &pair : matchedCourses)
+    {
+        for (const auto &course : pair.second)
+        {
             course.display();
         }
     }
 }
 
-Course Coursedata::find_TrueCourse(const string &courseName) const {
+Course Coursedata::find_TrueCourse(const string &courseName) const
+{
     int minDistance = INT_MAX;
 
     map<int, vector<Course>, greater<int>> matchedCourses;
 
-    for (const auto &course : courses) {
+    for (const auto &course : courses)
+    {
         int matchLength =
             longestCommonSubsequence(course.getname(), courseName);
-        if (matchLength > 0) {
+        if (matchLength > 0)
+        {
             matchedCourses[matchLength].push_back(course);
         }
     }
 
-    if (minDistance==0) {
+    if (minDistance == 0)
+    {
         cout << "未找到课程" << courseName << endl;
         return Course();
-    } else {
+    }
+    else
+    {
         if (minDistance > 3)
             return matchedCourses.begin()->second[0];
-        else {
+        else
+        {
             cout << "您要找的课程是不是：" << matchedCourses.begin()->second[0].getid() << " "
                  << matchedCourses.begin()->second[0].getname() << "？" << endl;
             cout << "请输入课程ID以确认：" << endl;
             int courseId;
             cin >> courseId;
-            if (courseId == matchedCourses.begin()->second[0].getid()) {
+            if (courseId == matchedCourses.begin()->second[0].getid())
+            {
                 matchedCourses.begin()->second[0].display();
                 return matchedCourses.begin()->second[0];
-            } else {
+            }
+            else
+            {
                 cout << "未找到课程" << courseName << endl;
                 return Course();
             }
@@ -165,35 +200,45 @@ Course Coursedata::find_TrueCourse(const string &courseName) const {
     }
 }
 
-Course Coursedata::find_TrueCourse(int courseId) const {
+Course &Coursedata::find_TrueCourse(int courseId)
+{
     // 使用二分查找，把复杂度降低到O(logn)
     int left = 0;
     int right = courses.size() - 1;
-    while (left <= right) {
+    while (left <= right)
+    {
         int mid = left + (right - left) / 2;
-        if (courses[mid].getid() == courseId) {
+        if (courses[mid].getid() == courseId)
+        {
             courses[mid].display();
             return courses[mid];
         }
-        if (courses[mid].getid() < courseId) {
+        if (courses[mid].getid() < courseId)
+        {
             left = mid + 1;
-        } else {
+        }
+        else
+        {
             right = mid - 1;
         }
     }
-    cout << "未找到课程" << courseId << endl;
-    return Course();
+    throw runtime_error("未找到课程" + to_string(courseId));
 }
 
-void Coursedata::displayCourses() const {
-    for (int i = 0; i < courses.size(); i++) {
+void Coursedata::displayCourses() const
+{
+    for (int i = 0; i < courses.size(); i++)
+    {
         courses[i].display();
     }
 }
 
-void Coursedata::displayCourse(const string &courseName) {
-    for (int i = 0; i < courses.size(); i++) {
-        if (courses[i].getname() == courseName) {
+void Coursedata::displayCourse(const string &courseName)
+{
+    for (int i = 0; i < courses.size(); i++)
+    {
+        if (courses[i].getname() == courseName)
+        {
             courses[i].display();
             return;
         }
@@ -201,11 +246,35 @@ void Coursedata::displayCourse(const string &courseName) {
     cout << "未找到课程" << courseName << endl;
 }
 
-void Coursedata::displayCourse(int courseId) {
+void Coursedata::displayCourse(int courseId)
+{
     Course tmp = find_TrueCourse(courseId);
-    if (tmp.getid() == courseId) {
+    if (tmp.getid() == courseId)
+    {
         tmp.display();
         return;
-    } else
+    }
+    else
         cout << "未找到课程" << courseId << endl;
+}
+
+void Course::addComment(const string &comment)
+{
+    // 获取当前时间
+    auto now = chrono::system_clock::now();
+    time_t now_time = chrono::system_clock::to_time_t(now);
+    // 转换为字符串
+    string time_str = ctime(&now_time);
+    // 去掉末尾的换行符
+    time_str = time_str.substr(0, time_str.length() - 1);
+    // 添加到评论
+    this->comments.push_back(comment + "\t" + time_str);
+}
+
+void Course::show_comments() const
+{
+    for (const auto &comment : comments)
+    {
+        cout << comment << endl;
+    }
 }
